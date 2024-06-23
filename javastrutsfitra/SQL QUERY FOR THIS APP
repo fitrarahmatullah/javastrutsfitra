@@ -1,0 +1,60 @@
+CREATE TABLE item (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    name VARCHAR(200),
+    price INT
+);
+
+CREATE SEQUENCE order_sequence
+    START WITH 1
+    INCREMENT BY 1;
+
+CREATE TABLE order_table (
+    order_no VARCHAR(20) PRIMARY KEY DEFAULT 'O' + CAST(NEXT VALUE FOR order_sequence AS VARCHAR(10)),
+    item_id INT,
+    qty INT
+);
+
+CREATE TABLE inventory (
+    item_id INT,
+    qty INT,
+    type VARCHAR(1), -- 'T' for Top Up, 'W' for Withdrawal
+    CONSTRAINT PK_inventory PRIMARY KEY (item_id, type),
+    CONSTRAINT FK_inventory_item FOREIGN KEY (item_id) REFERENCES item(id)
+);
+
+==============================================================================
+INSERT INTO item (name, price) VALUES
+('Pen', 5),
+('Book', 10),
+('Bag', 30),
+('Pencil', 3),
+('Shoe',45),
+('Box',5),
+('Cap',25)
+;
+
+INSERT INTO order_table (item_id, qty) VALUES
+(1, 2),
+(2, 3),
+(5, 4),
+(4, 1),
+(5, 2),
+(6, 3),
+(1, 5),
+(2, 4),
+(3, 2),
+(4, 3)
+;
+
+
+INSERT INTO inventory (item_id, qty, type) VALUES
+(1, 5, 'T'), 
+(2, 10, 'T'),  
+(3, 30, 'T'),
+(4, 3, 'T'), 
+(5, 45, 'T'),  
+(6, 5, 'T'),
+(7, 25, 'T'), 
+(5, 10, 'W')
+
+;  
